@@ -1,6 +1,7 @@
 const path = require('path')
 const http = require('http')
 const express = require('express')
+require('dotenv').config()
 const socketio = require('socket.io')
 const formatMessage = require('./utils/messages')
 const {
@@ -10,6 +11,17 @@ const {
   getRoomUsers,
 } = require('./utils/users')
 
+// connectDB
+const connectDB = require('./db/connect')
+
+// routes
+const routes = require('./routes/routes')
+
+// error-hanlers
+const notFoundMiddleware = require('./middleware/not-found')
+const errorHandlerMiddleware = require('./middleware/error-handler')
+
+// middleware
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
@@ -17,7 +29,13 @@ const io = socketio(server)
 //set static folder
 app.use(express.static(path.join(__dirname, 'public')))
 
-const botName = 'ChatCord bot'
+// routes
+app.use('/api/v1', routes)
+
+app.use(notFoundMiddleware)
+app.use(errorHandlerMiddleware)
+
+const botName = 'Chatbot'
 
 // Run when client connects
 io.on('connection', (socket) => {
@@ -27,7 +45,10 @@ io.on('connection', (socket) => {
     socket.join(user.room)
 
     // welcome current user
-    socket.emit('message', formatMessage(botName, 'Welcome to ChatCord!'))
+    socket.emit(
+      'message',
+      formatMessage(botName, `Welcome to ${user.room} chat room`)
+    )
 
     // Broadcast when a user connects
     socket.broadcast
@@ -70,4 +91,13 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3000
 
-server.listen(PORT, console.log(`server is listening on port ${PORT}`))
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI)
+    server.listen(PORT, console.log(`server is listening on port ${PORT}`))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+start()
