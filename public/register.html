@@ -21,15 +21,12 @@
       <main class="join-main">
         <p>
           <i>Hi! Welcome to MWECAU ICT Club forum.</i> <br />
-          Join with your other fellow club members and initiate talks and
-          discussions in a live chat, share different knowledges and enjoy an
-          interactive environment
+          Please create an Account to get started using ICT Club live chat forum
         </p>
 
-        <h3 style="text-align: center; margin: 5px">Sign In</h3>
+        <h3 style="text-align: center; margin: 5px">Sign Up</h3>
         <div class="form-msg"></div>
-
-        <form class="loginForm">
+        <form class="registerForm">
           <div class="form-control">
             <label for="username">Username</label>
             <input type="text" name="username" id="username" required />
@@ -38,10 +35,14 @@
             <label for="room">Password</label>
             <input type="password" name="password" id="password" required />
           </div>
-          <button type="submit" class="btn">Sign in</button>
+          <div class="form-control">
+            <label for="room">Confirm Password</label>
+            <input type="password" name="cPassword" id="cPassword" required />
+          </div>
+          <button type="submit" class="btn">Sign up</button>
         </form>
         <label
-          >Don't have an account? <a href="register.html">Sign Up</a></label
+          >Already have an account? <a href="index copy.html">Sign In</a></label
         >
       </main>
     </div>
@@ -52,6 +53,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="js/login.js"></script>
+    <script src="js/register.js"></script>
   </body>
 </html>

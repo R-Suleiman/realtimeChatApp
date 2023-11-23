@@ -18,21 +18,29 @@ const getMessages = async (req, res) => {
   res.status(StatusCodes.OK).json({ messages, count: messages.length })
 }
 
-// const clearChat = async(req, res) => {
-//  const {
-//   user: userId,
-//  body: room
-//  } = req
+const clearChat = async (req, res) => {
+  const { user: userId, body: msgDeleteFlag } = req
 
-//  const messages = await Messages.deleteMany({user: userId, room})
-//  res.status(StatusCodes.OK)
-// }
+  const user = await Messages.findOneAndUpdate({ user: userId }, req.body, {
+    new: true,
+    runValidators: true,
+  })
 
-// const deleteMessage = async (req, res) => {
-//  const {id: messageId} = req.params
-// }
+  if (!user) {
+    throw new NotFoundError(`No user with id ${userId}`)
+  }
+  res.status(StatusCodes.OK).json({ user })
+}
+
+const deleteMessage = async (req, res) => {
+  const { id: messageId } = req.params
+  const message = await Messages.findByIdAndDelete({ messageId })
+  res.status(StatusCodes.OK)
+}
 
 module.exports = {
   createMessage,
   getMessages,
+  deleteMessage,
+  clearChat,
 }

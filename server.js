@@ -27,6 +27,7 @@ const server = http.createServer(app)
 const io = socketio(server)
 
 //set static folder
+app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // routes

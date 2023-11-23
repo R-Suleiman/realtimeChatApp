@@ -15,6 +15,26 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide password'],
     minlength: 6,
   },
+  msgDeleteFlag: [
+    {
+      programming: {
+        type: Boolean,
+        default: false,
+      },
+      graphicDesign: {
+        type: Boolean,
+        default: false,
+      },
+      networkAndSecurity: {
+        type: Boolean,
+        default: false,
+      },
+      computerMaintenance: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
 })
 
 // generating salt and hash password
@@ -25,9 +45,13 @@ userSchema.pre('save', async function () {
 
 // create jwt
 userSchema.methods.createJWT = function () {
-  return jwt.sign({ userId: this._id, username }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  })
+  return jwt.sign(
+    { userId: this._id, username: this.username },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_LIFETIME,
+    }
+  )
 }
 
 // compare passwords

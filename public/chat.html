@@ -13,10 +13,19 @@
     <title>ICT-Club Forum</title>
   </head>
   <body>
+    <!-- checks for token presence -->
+    <script>
+      // check if the token is present
+      const token = localStorage.getItem('token')
+      if (!token) {
+        window.location.href = 'index.html'
+      }
+    </script>
+
     <div class="chat-container">
       <header class="chat-header">
         <h1><i class="fas fa-smile"></i> ICT-Club Forum</h1>
-        <a href="index.html" class="btn">Leave Room</a>
+        <a href="room.html" class="btn">Leave Room</a>
       </header>
       <main class="chat-main">
         <div class="chat-sidebar">
@@ -41,6 +50,12 @@
       </div>
     </div>
 
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
       integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="

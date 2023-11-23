@@ -2,16 +2,39 @@ const chatForm = document.getElementById('chat-form')
 const chatMessages = document.querySelector('.chat-messages')
 const roomName = document.getElementById('room-name')
 const userList = document.getElementById('users')
-
+let username
 // Get username and room from URL
-const { username, room } = Qs.parse(location.search, {
+const { room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 })
 
+const getUserProfile = async () => {
+  const token = localStorage.getItem('token')
+  try {
+    const {
+      data: { user },
+    } = await axios.get('/api/v1/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    const { username: newName } = user
+    username = newName
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const socket = io()
 
-// Join chatRoom
-socket.emit('joinRoom', { username, room })
+const initChat = async () => {
+  await getUserProfile()
+
+  // Join chatRoom
+  socket.emit('joinRoom', { username, room })
+}
+initChat()
 
 // Get room and users
 socket.on('roomUsers', ({ room, users }) => {
@@ -21,7 +44,6 @@ socket.on('roomUsers', ({ room, users }) => {
 
 // message from server
 socket.on('message', (message) => {
-  console.log(message)
   outputMessage(message)
 
   // scrol down
