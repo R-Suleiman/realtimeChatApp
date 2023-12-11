@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300&display=swap');
 
 :root {
-  --dark-color-a: #667aff;
-  --dark-color-b: #7386ff;
+  --dark-color-a: #138b3f;
+  --dark-color-b: #19c357;
   --light-color: #e6e9ff;
   --success-color: #5cb85c;
   --error-color: #d9534f;
@@ -178,6 +179,12 @@ input[type='password'] {
   margin-top: 20px;
   margin-bottom: 10px;
   width: 100%;
+}
+
+.welcome-text {
+  font-family: 'Kalam', cursive;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 @media (max-width: 700px) {

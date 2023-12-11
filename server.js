@@ -1,6 +1,7 @@
 const path = require('path')
 const http = require('http')
 const express = require('express')
+require('express-async-errors')
 require('dotenv').config()
 const socketio = require('socket.io')
 const formatMessage = require('./utils/messages')
@@ -36,7 +37,7 @@ app.use('/api/v1', routes)
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
 
-const botName = 'Chatbot'
+const botName = 'ICT-Club'
 
 // Run when client connects
 io.on('connection', (socket) => {
@@ -48,7 +49,10 @@ io.on('connection', (socket) => {
     // welcome current user
     socket.emit(
       'message',
-      formatMessage(botName, `Welcome to ${user.room} chat room`)
+      formatMessage(
+        botName,
+        `Welcome to ${user.room} chat room. <br><br> Please note that, currently ALL messages sent or received will disappear as soon as you leave the chat room or refresh this page`
+      )
     )
 
     // Broadcast when a user connects

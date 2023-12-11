@@ -1,5 +1,6 @@
 const chatForm = document.getElementById('chat-form')
 const chatMessages = document.querySelector('.chat-messages')
+const msgLoader = document.querySelector('.msg-loader')
 const roomName = document.getElementById('room-name')
 const userList = document.getElementById('users')
 let username
@@ -9,6 +10,7 @@ const { room } = Qs.parse(location.search, {
 })
 
 const getUserProfile = async () => {
+  msgLoader.classList.remove('hide')
   const token = localStorage.getItem('token')
   try {
     const {
@@ -21,6 +23,7 @@ const getUserProfile = async () => {
 
     const { username: newName } = user
     username = newName
+    msgLoader.classList.add('hide')
   } catch (error) {
     console.log(error)
   }
