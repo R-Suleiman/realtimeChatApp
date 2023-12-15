@@ -13,7 +13,7 @@ const {
 router.route('/register').post(register)
 router.route('/login').post(login)
 router
-  .route('/messages')
+  .route('/messages/:room')
   .post(userAuthentication, createMessage)
   .get(userAuthentication, getMessages)
   .patch(userAuthentication, clearChat)

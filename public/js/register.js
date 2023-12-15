@@ -6,13 +6,15 @@ const formMsg = document.querySelector('.form-msg')
 const nameError = document.querySelector('.nameError')
 const passwordError = document.querySelector('.passwordError')
 const cPasswordError = document.querySelector('.cPasswordError')
+let errorColor = '#d9534f'
 
 usernameInput.addEventListener('input', function () {
   if (this.value.length < 3 && this.value !== '') {
-    nameError.style.color = 'red'
+    nameError.style.display = 'block'
+    nameError.style.backgroundColor = errorColor
     nameError.innerHTML = 'Name too short. Must be at least 3 characters long'
   } else {
-    nameError.innerHTML = ''
+    nameError.style.display = 'none'
   }
 })
 
@@ -20,11 +22,12 @@ passwordInput.addEventListener('input', function () {
   const passwordFormat =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
   if (!passwordFormat.test(this.value) && this.value !== '') {
-    passwordError.style.color = 'red'
+    passwordError.style.display = 'block'
+    passwordError.style.backgroundColor = errorColor
     passwordError.innerHTML =
       'Password must be strong: at least 8 characters, including upper and lower case letters, numbers, and special characters'
   } else {
-    passwordError.innerHTML = ''
+    passwordError.style.display = 'none'
   }
 })
 
@@ -32,10 +35,11 @@ cPasswordInput.addEventListener('input', function () {
   const password = passwordInput.value
 
   if (password !== this.value && this.value !== '') {
-    cPasswordError.style.color = 'red'
+    cPasswordError.style.display = 'block'
+    cPasswordError.style.backgroundColor = errorColor
     cPasswordError.innerHTML = 'Password do not match'
   } else {
-    cPasswordError.innerHTML = ''
+    cPasswordError.style.display = 'none'
   }
 })
 
@@ -55,24 +59,25 @@ formDOM.addEventListener('submit', async (e) => {
   ]
 
   if (username.length < 3 && username !== '') {
-    nameError.style.color = 'red'
+    nameError.style.backgroundColor = errorColor
     nameError.innerHTML = 'Name too short. Must be at least 3 characters long'
     e.preventDefault()
   } else {
     const passwordFormat =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     if (!passwordFormat.test(password) && password !== '') {
-      passwordError.style.color = 'red'
+      passwordError.style.backgroundColor = errorColor
       passwordError.innerHTML =
         'Password must be strong: at least 8 characters, including upper and lower case letters, numbers, and special characters'
       e.preventDefault()
     } else {
       if (password !== cPassword && cPassword !== '') {
-        cPasswordError.style.color = 'red'
+        cPasswordError.style.backgroundColor = errorColor
         cPasswordError.innerHTML = 'Password do not match'
         e.preventDefault()
       } else {
         formMsg.style.color = 'white'
+        formMsg.style.backgroundColor = 'green'
         formMsg.innerHTML = `Processing, please wait...`
         try {
           const { data } = await axios.post('/api/v1/register', {
@@ -91,7 +96,7 @@ formDOM.addEventListener('submit', async (e) => {
           window.location.href = '../index.html'
         } catch (error) {
           console.log(error)
-          formMsg.style.color = 'red'
+          formMsg.style.backgroundColor = errorColor
           if (error.response && error.response.data.message) {
             const error2 = error.response.data.message
             formMsg.innerHTML = `<label style="font-weight: bold">${error2}</label>`

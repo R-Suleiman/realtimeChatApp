@@ -2,10 +2,12 @@ const usernameInput = document.getElementById('username')
 const passwordInput = document.getElementById('password')
 const formDOM = document.querySelector('.loginForm')
 const formMsg = document.querySelector('.form-msg')
+let errorColor = '#d9534f'
 
 formDOM.addEventListener('submit', async (e) => {
   e.preventDefault()
   formMsg.style.color = 'white'
+  formMsg.style.backgroundColor = 'green'
   formMsg.innerHTML = `Processing, please wait...`
 
   const username = usernameInput.value
@@ -18,7 +20,7 @@ formDOM.addEventListener('submit', async (e) => {
     })
 
     if (!data.user) {
-      formMsg.style.color = 'red'
+      formMsg.style.backgroundColor = errorColor
       formMsg.innerHTML = `Invalid credentials`
     } else {
       usernameInput.value = ''
@@ -30,7 +32,7 @@ formDOM.addEventListener('submit', async (e) => {
     }
   } catch (error) {
     console.log(error)
-    formMsg.style.color = 'red'
+    formMsg.style.backgroundColor = errorColor
     if (error.response && error.response.data.message) {
       const error2 = error.response.data.message
       formMsg.innerHTML = `<label style="font-weight: bold">${error2}</label>`

@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
       'message',
       formatMessage(
         botName,
-        `Welcome to ${user.room} chat room. <br><br> Please note that, currently ALL messages sent or received will disappear as soon as you leave the chat room or refresh this page`
+        `Welcome to ${user.room} chat room. <br><br> Please note that, currently ALL messages sent or received in the chat will automatically disappear after 24 hrs`
       )
     )
 

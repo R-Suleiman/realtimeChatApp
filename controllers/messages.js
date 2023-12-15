@@ -4,13 +4,14 @@ const { BadRequestError, NotFoundError } = require('../errors')
 
 const createMessage = async (req, res) => {
   req.body.user = req.user.userId
+  req.body.room = req.params.room
   const message = await Messages.create(req.body)
   res.status(StatusCodes.OK).json({ message })
 }
 
 const getMessages = async (req, res) => {
-  const messages = await Messages.find({ room: req.body.room })
-    .sort({ createdAt: -1 })
+  const messages = await Messages.find({ room: req.params.room })
+    .sort({ createdAt: 1 })
     .populate({
       path: 'user',
       select: 'username',
@@ -18,6 +19,7 @@ const getMessages = async (req, res) => {
   res.status(StatusCodes.OK).json({ messages, count: messages.length })
 }
 
+// FIX THIS BY UPDATING THE FLAG IN THE PROFILE
 const clearChat = async (req, res) => {
   const { user: userId, body: msgDeleteFlag } = req
 
@@ -34,8 +36,8 @@ const clearChat = async (req, res) => {
 
 const deleteMessage = async (req, res) => {
   const { id: messageId } = req.params
-  const message = await Messages.findByIdAndDelete({ messageId })
-  res.status(StatusCodes.OK)
+  const message = await Messages.findOneAndDelete({ _id: messageId })
+  res.status(StatusCodes.OK).json({ message })
 }
 
 module.exports = {
