@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
 
     // welcome current user
     socket.emit(
-      'message',
+      'bot-message',
       formatMessage(
         botName,
         `Welcome to ${user.room} chat room. <br><br> Please note that, currently ALL messages sent or received in the chat will automatically disappear after 24 hrs`
@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
     socket.broadcast
       .to(user.room)
       .emit(
-        'message',
+        'bot-message',
         formatMessage(botName, `${user.username} has joined a chat`)
       )
 
@@ -71,9 +71,9 @@ io.on('connection', (socket) => {
   })
 
   // Listen for a chat mesage
-  socket.on('chatMessage', (msg) => {
+  socket.on('chatMessage', (message) => {
     const user = getCurrentUser(socket.id)
-    io.to(user.room).emit('message', formatMessage(user.username, msg))
+    io.to(user.room).emit('message', formatMessage(user.username, message))
   })
 
   // Runs when client disconnects
@@ -81,7 +81,7 @@ io.on('connection', (socket) => {
     const user = userLeave(socket.id)
     if (user) {
       io.to(user.room).emit(
-        'message',
+        'bot-message',
         formatMessage(botName, `${user.username} has left the chat`)
       )
 

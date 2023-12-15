@@ -4,6 +4,7 @@ const msgLoader = document.querySelector('.msg-loader')
 const roomName = document.getElementById('room-name')
 const userList = document.getElementById('users')
 let username
+let userId
 
 // Get username and room from URL
 const { room } = Qs.parse(location.search, {
@@ -23,8 +24,9 @@ const getUserProfile = async () => {
       },
     })
 
-    const { username: newName } = user
+    const { username: newName, _id } = user
     username = newName
+    userId = _id
     msgLoader.classList.add('hide')
   } catch (error) {
     console.log(error)
@@ -50,7 +52,13 @@ const getMessages = async (req, res) => {
           const time = formatTime(msg.createdAt)
           const div = document.createElement('div')
           div.classList.add('message')
-          div.innerHTML = `<p class="meta">${msg.user.username} <span>${time}</span></p>
+          div.innerHTML = `<p class="meta">${
+            msg.user.username
+          } <span>${time}</span> <span class="${
+            msg.user._id === userId ? '' : 'hide'
+          }" style="float: right; color: red"><i class="fa fa-trash deleteMsg" data-id='${
+            msg._id
+          }' ></i></span></p>
             <p class="text">
             ${msg.message}
             </p>`
@@ -89,6 +97,11 @@ socket.on('roomUsers', ({ room, users }) => {
   outputUsers(users)
 })
 
+//bot message from server
+socket.on('bot-message', (message) => {
+  outputBotMessage(message)
+})
+
 // message from server
 socket.on('message', (message) => {
   outputMessage(message)
@@ -105,9 +118,6 @@ chatForm.addEventListener('submit', async (e) => {
   // Get message text
   const msg = e.target.elements.msg.value
 
-  // Emit a message to the server
-  socket.emit('chatMessage', msg)
-
   // make an API call to save the message to the DB
   try {
     const {
@@ -123,6 +133,10 @@ chatForm.addEventListener('submit', async (e) => {
         },
       }
     )
+    if (message) {
+      // Emit a message to the server
+      socket.emit('chatMessage', message)
+    }
   } catch (error) {
     console.log(error)
   }
@@ -133,41 +147,72 @@ chatForm.addEventListener('submit', async (e) => {
 })
 
 // event to delete a message
-async function confirmDelete(msgId) {
-  const isConfirmed = window.confirm('Delete message?')
-  if (isConfirmed) {
-    const token = localStorage.getItem('token')
 
-    try {
-      const {
-        data: { message },
-      } = await axios.delete(`/api/v1/messages/${msgId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      // window.location.reload(true)
+document
+  .querySelector('.chat-messages')
+  .addEventListener('click', async (e) => {
+    const el = e.target
+    const msgId = el.dataset.id
+    if (el.classList.contains('deleteMsg')) {
+      const isConfirmed = window.confirm('Delete message?')
+      if (isConfirmed) {
+        const token = localStorage.getItem('token')
 
-      if (message) {
-        window.location.reload()
+        try {
+          const {
+            data: { message },
+          } = await axios.delete(`/api/v1/messages/${msgId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          // window.location.reload(true)
+
+          if (message) {
+            let currentElement = el
+            while (
+              currentElement &&
+              !currentElement.classList.contains('message')
+            ) {
+              currentElement = currentElement.parentElement
+            }
+            currentElement.classList.add('hide')
+          }
+          // window.location.href = window.location.href
+        } catch (error) {
+          console.log(error)
+        }
       }
-      // window.location.href = window.location.href
-    } catch (error) {
-      console.log(error)
     }
-  }
-}
+  })
 
-// Output message to DOM
-
-//<span style="float: right; color: red"><i class="fa fa-trash deleteMsg" data-id='${msg._id}' onclick='confirmDelete('${message._id}')'></i></span>
-
-function outputMessage(message) {
+// output bot message
+function outputBotMessage(message) {
   const div = document.createElement('div')
   div.classList.add('message')
   div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
             <p class="text">
             ${message.text}
+            </p>`
+  document.querySelector('.chat-messages').appendChild(div)
+}
+
+// Output message to DOM
+
+function outputMessage(message) {
+  const msgUserId = message.text.user
+  const time = formatTime(message.text.createdAt)
+  const div = document.createElement('div')
+  div.classList.add('message')
+  div.innerHTML = `<p class="meta">${
+    message.username
+  } <span>${time}</span> <span class="${
+    msgUserId === userId ? '' : 'hide'
+  }" style="float: right; color: red"><i class="fa fa-trash deleteMsg" data-id='${
+    message.text._id
+  }' ></i></span></p>
+            <p class="text">
+            ${message.text.message}
             </p>`
   document.querySelector('.chat-messages').appendChild(div)
 }
