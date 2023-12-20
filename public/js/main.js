@@ -29,6 +29,8 @@ const getUserProfile = async () => {
     userId = _id
     msgLoader.classList.add('hide')
   } catch (error) {
+    msgLoader.classList.remove('hide')
+    msgLoader.innerHTML = 'Error loading messages. Try again'
     console.log(error)
   }
 }

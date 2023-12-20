@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Check if service worker is supported
     if ('serviceWorker' in navigator) {
       // Register service worker
-      sw = await navigator.serviceWorker.register('js/worker.js')
+      sw = await navigator.serviceWorker.register('worker.js', {
+        scope: '/',
+      })
     }
   } catch (error) {
     console.log('service worker registration failed')
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Event listener when the button is pressed
 btn.addEventListener('click', async () => {
+  btn.disabled = true
   const isSubscribed = await checkSubscription()
 
   if (isSubscribed) {
@@ -59,6 +62,7 @@ const subscribeUser = async () => {
     { headers: { Authorization: `Bearer ${token}` } }
   )
 
+  btn.disabled = false
   // Update button state
   updateButtonState(true)
 }
@@ -79,6 +83,7 @@ const unsubscribeUser = async () => {
       data: { subscription },
     })
 
+    btn.disabled = false
     // Update button state
     updateButtonState(false)
   }
@@ -102,44 +107,3 @@ function urlBased64ToUint8Array(base64String) {
   }
   return outputArray
 }
-
-//const btn = document.getElementById('allowNotf')
-// const publicVapidKey =
-//   'BHVG0q1uUA_uE4BJDlqaWGGtYpE4sv04uB8j9sWEKXcfHvz8NcEL1wnm7IocC1CITxzaEDcmWTfPG6WzLsB-yH0'
-
-// // event listener when button is pressed
-// btn.addEventListener('click', async () => {
-//   const token = localStorage.getItem('token')
-
-//   // check for service worker
-//   if ('serviceWorker' in navigator) {
-//     send().catch((err) => console.error(err))
-//   }
-// })
-
-// // register service worker, register push, send notification
-// const send = async () => {
-//   console.log('registering sw...')
-//   // register SW and push
-//   let sw = await navigator.serviceWorker.register('js/worker.js')
-
-//   let subscription = await sw.pushManager.subscribe({
-//     userVisibleOnly: true,
-//     applicationServerKey: urlBased64ToUint8Array(publicVapidKey),
-//   })
-
-//   // send push notification
-//   const {
-//     data: { data },
-//   } = await axios.post(
-//     '/api/v1/notifications/subscription',
-//     {
-//       subscription,
-//     },
-//     {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }
-//   )
-// }

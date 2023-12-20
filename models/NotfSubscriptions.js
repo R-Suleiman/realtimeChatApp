@@ -5,7 +5,6 @@ const subscriptionSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: 'User',
   },
-  isSubscribed: { type: Boolean, default: false },
   subscription: { type: mongoose.Schema.Types.Mixed },
 })
 

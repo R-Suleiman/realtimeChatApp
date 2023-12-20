@@ -37,7 +37,7 @@ formDOM.addEventListener('submit', async (e) => {
       const error2 = error.response.data.message
       formMsg.innerHTML = `<label style="font-weight: bold">${error2}</label>`
     } else {
-      formMsg.innerHTML = error
+      formMsg.innerHTML = 'Network Error. Try Again'
       console.error('An error occurred:', error)
     }
   }

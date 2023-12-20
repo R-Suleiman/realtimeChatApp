@@ -11,7 +11,6 @@ webPush.setVapidDetails(
 // subscribe route
 const subscribe = async (req, res) => {
   req.body.user = req.user.userId
-  req.body.isSubscribed = true
   let data
 
   try {
@@ -67,6 +66,7 @@ const sendNotification = async (req, res) => {
     title: `New message: ${req.params.id}`,
     message: message.message,
     user: username,
+    room: req.params.id,
   })
 
   //pass push into the send notification and send it to all subscribers
