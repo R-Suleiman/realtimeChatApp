@@ -137,6 +137,17 @@ chatForm.addEventListener('submit', async (e) => {
       // Emit a message to the server
       socket.emit('chatMessage', message)
     }
+
+    // send a notification to the server
+    await axios.post(
+      `/api/v1/notification/${message.room}`,
+      { message, username },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
   } catch (error) {
     console.log(error)
   }

@@ -191,6 +191,22 @@ input[type='password'] {
   display: none;
 }
 
+#allowNotf {
+  padding: 8px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px solid #3498db;
+  color: green;
+  border-radius: 5px;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+#allowNotf:hover {
+  background-color: var(--dark-color-a);
+  color: #fff;
+}
+
 @media (max-width: 700px) {
   .chat-main {
     display: block;

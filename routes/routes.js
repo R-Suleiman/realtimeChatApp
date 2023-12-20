@@ -9,6 +9,11 @@ const {
   deleteMessage,
   clearChat,
 } = require('../controllers/messages')
+const {
+  subscribe,
+  unsubscribe,
+  sendNotification,
+} = require('../controllers/notifications')
 
 router.route('/register').post(register)
 router.route('/login').post(login)
@@ -19,5 +24,12 @@ router
   .patch(userAuthentication, clearChat)
 router.route('/messages/:id').delete(deleteMessage)
 router.route('/user').get(userAuthentication, getUser)
+
+// notification routes
+router
+  .route('/notifications/subscription')
+  .post(userAuthentication, subscribe)
+  .delete(userAuthentication, unsubscribe)
+router.route('/notification/:id').post(userAuthentication, sendNotification)
 
 module.exports = router

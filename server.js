@@ -27,8 +27,9 @@ const app = express()
 const server = http.createServer(app)
 const io = socketio(server)
 
-//set static folder
 app.use(express.json())
+
+//set static folder
 app.use(express.static(path.join(__dirname, 'public')))
 
 // routes
@@ -51,7 +52,7 @@ io.on('connection', (socket) => {
       'bot-message',
       formatMessage(
         botName,
-        `Welcome to ${user.room} chat room. <br><br> Please note that, currently ALL messages sent or received in the chat will automatically disappear after 24 hrs`
+        `Welcome to ${user.room} chat room. <br><br> <b>Experimental</b>`
       )
     )
 
