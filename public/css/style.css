@@ -90,6 +90,9 @@ a {
   padding: 30px;
   max-height: 500px;
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .chat-messages .message {
@@ -97,18 +100,27 @@ a {
   margin-bottom: 15px;
   background-color: var(--light-color);
   border-radius: 5px;
+  width: 70%;
+  align-self: flex-start;
+}
+
+.chat-messages .sent {
+  background-color: var(--dark-color-b);
+  align-items: right;
+  color: white;
+  align-self: flex-end;
 }
 
 .chat-messages .message .meta {
   font-size: 15px;
   font-weight: bold;
-  color: var(--dark-color-b);
+  color: rgb(29, 27, 27);
   opacity: 0.7;
   margin-bottom: 7px;
 }
 
 .chat-messages .message .meta span {
-  color: #777;
+  color: rgb(29, 27, 27);
 }
 
 .chat-form-container {
@@ -205,6 +217,40 @@ input[type='password'] {
 #allowNotf:hover {
   background-color: var(--dark-color-a);
   color: #fff;
+}
+
+#contextMenu {
+  display: none;
+  position: absolute;
+  background-color: rgb(29, 27, 27);
+  color: white;
+  padding: 5px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.contextItem {
+  margin: 5px;
+}
+
+.reply-block {
+  display: none;
+  width: 100%;
+  padding: 5px;
+  background-color: rgb(44, 43, 43);
+  color: white;
+}
+
+.repliedText {
+  border-radius: 5px;
+  padding: 5px;
+  border-left: 2px solid whitesmoke;
+  border-bottom: 2px solid whitesmoke;
+  color: white;
 }
 
 @media (max-width: 700px) {

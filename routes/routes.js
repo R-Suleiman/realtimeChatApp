@@ -6,6 +6,7 @@ const { register, login, getUser } = require('../controllers/auth')
 const {
   createMessage,
   getMessages,
+  getMessage,
   deleteMessage,
   clearChat,
 } = require('../controllers/messages')
@@ -22,7 +23,8 @@ router
   .post(userAuthentication, createMessage)
   .get(userAuthentication, getMessages)
   .patch(userAuthentication, clearChat)
-router.route('/messages/:id').delete(deleteMessage)
+router.route('/messages/:id').delete(userAuthentication, deleteMessage)
+router.route('/message/:id').get(userAuthentication, getMessage)
 router.route('/user').get(userAuthentication, getUser)
 
 // notification routes

@@ -49,7 +49,7 @@ const unsubscribe = async (req, res) => {
 const sendNotification = async (req, res) => {
   req.body.user = req.user.userId
   req.body.room = req.params.id
-  const { message, username } = req.body
+  const { resultMessage: message, username } = req.body
 
   // fetch all the subscribed users to send the notification to
   const users = await Subscriptions.find({})
@@ -58,8 +58,7 @@ const sendNotification = async (req, res) => {
     throw new NotFoundError('No any users found')
   }
 
-  // send a status
-  res.status(201).json({ users })
+  res.status(200).json({})
 
   // create a payload
   const payload = JSON.stringify({

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const Messages = require('../models/Messages')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
@@ -5,6 +6,10 @@ const { BadRequestError, NotFoundError } = require('../errors')
 const createMessage = async (req, res) => {
   req.body.user = req.user.userId
   req.body.room = req.params.room
+  if (req.body.replyId) {
+    const id = new mongoose.Types.ObjectId(req.body.replyId)
+    req.body.replyTo = id
+  }
   const message = await Messages.create(req.body)
   res.status(StatusCodes.OK).json({ message })
 }
@@ -17,6 +22,18 @@ const getMessages = async (req, res) => {
       select: 'username',
     })
   res.status(StatusCodes.OK).json({ messages, count: messages.length })
+}
+
+const getMessage = async (req, res) => {
+  const userMsg = await Messages.findOne({ _id: req.params.id }).populate({
+    path: 'user',
+    select: 'username',
+  })
+  if (!userMsg) {
+    throw new NotFoundError(`No message with id: ${req.params.id}`)
+  }
+
+  res.status(StatusCodes.OK).json({ userMsg })
 }
 
 // FIX THIS BY UPDATING THE FLAG IN THE PROFILE
@@ -43,6 +60,7 @@ const deleteMessage = async (req, res) => {
 module.exports = {
   createMessage,
   getMessages,
+  getMessage,
   deleteMessage,
   clearChat,
 }

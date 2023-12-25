@@ -13,6 +13,9 @@ const messagesSchema = new mongoose.Schema(
     room: {
       type: String,
     },
+    replyTo: {
+      type: mongoose.Types.ObjectId,
+    },
   },
   { timestamps: true }
 )

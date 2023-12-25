@@ -11,6 +11,8 @@ self.addEventListener('push', async (e) => {
     if (!isVisible) {
       self.registration.showNotification(data.title, {
         body: `${data.user}: ${data.message}`,
+        icon: 'img/user.png',
+        badge: 'img/favicon.png',
         tag: data.room,
         vibrate: [200, 100, 200],
       })

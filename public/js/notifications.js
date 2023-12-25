@@ -56,15 +56,17 @@ const subscribeUser = async () => {
 
   // Send push subscription to the server
   const token = localStorage.getItem('token')
-  await axios.post(
+  const response = await axios.post(
     '/api/v1/notifications/subscription',
     { subscription },
     { headers: { Authorization: `Bearer ${token}` } }
   )
 
-  btn.disabled = false
-  // Update button state
-  updateButtonState(true)
+  if (response) {
+    btn.disabled = false
+    // Update button state
+    updateButtonState(true)
+  }
 }
 
 // Function to unsubscribe the user
@@ -78,14 +80,16 @@ const unsubscribeUser = async () => {
 
     // Remove push subscription from the server
     const token = localStorage.getItem('token')
-    await axios.delete('/api/v1/notifications/subscription', {
+    const response = await axios.delete('/api/v1/notifications/subscription', {
       headers: { Authorization: `Bearer ${token}` },
       data: { subscription },
     })
 
-    btn.disabled = false
-    // Update button state
-    updateButtonState(false)
+    if (response) {
+      btn.disabled = false
+      // Update button state
+      updateButtonState(false)
+    }
   }
 }
 
