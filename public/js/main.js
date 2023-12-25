@@ -202,13 +202,13 @@ chatForm.addEventListener('submit', async (e) => {
         }
       )
       if (message) {
-        msgLoader.classList.add('hide')
         resultMessage = message
         // Emit a message to the server
         socket.emit('chatMessage', message)
       }
     }
 
+    msgLoader.classList.add('hide')
     // send a notification to the server
     const response = await axios.post(
       `/api/v1/notification/${resultMessage.room}`,
@@ -282,7 +282,9 @@ async function outputMessage(message) {
   const time = formatTime(message.text.createdAt)
   const div = document.createElement('div')
   div.classList.add('message')
-  div.classList.add('sent')
+  if (message.username === username) {
+    div.classList.add('sent')
+  }
   div.dataset.id = message.text._id
   div.dataset.userid = message.text.user
   let repliedMsg
