@@ -12,7 +12,7 @@ self.addEventListener('push', async (e) => {
       self.registration.showNotification(data.title, {
         body: `${data.user}: ${data.message}`,
         icon: 'img/user.png',
-        badge: 'img/ICT-Club-logo.jpg',
+        badge: 'img/favicon.png',
         tag: data.room,
         vibrate: [200, 100, 200],
       })
@@ -44,11 +44,11 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close() // Close the notification
 
   // Open chat.html when the notification is clicked
-  const urlToOpen = `/chat.html?room=${room}`
+  const newParam = room.replace(/ /g, '+').replace(/&/g, '%26')
+  const urlToOpen = `/chat.html?room=${newParam}`
 
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then((clientList) => {
-      console.log(clientList)
       for (const client of clientList) {
         // Check if the URL starts with the expected pattern
         if (client.url.endsWith(urlToOpen) && 'focus' in client) {
@@ -58,7 +58,7 @@ self.addEventListener('notificationclick', (event) => {
 
       // If no matching client found, open a new window with the specified URL
       if (clients.openWindow) {
-        return clients.openWindow(urlToOpen)
+        return clients.openWindow('/room.html')
       }
     })
   )
